@@ -1,6 +1,8 @@
-import { Link } from "react-router-dom";
+import { Link } from 'react-router-dom';
 
-export default function ProductCard({ id, name, price, img }) {
+export default function ProductCard({
+  id, name, price, img,
+}) {
   return (
     <div className="col-4">
       <div className="card catalog-item-card">
@@ -8,7 +10,7 @@ export default function ProductCard({ id, name, price, img }) {
         <div className="card-body">
           <p className="card-text">{name}</p>
           <p className="card-text">
-            {new Intl.NumberFormat().format(Number(price))} руб.
+            {`${new Intl.NumberFormat().format(Number(price))} руб.`}
           </p>
           <Link to={`/products/${id}`} className="btn btn-outline-primary">
             Заказать
@@ -18,4 +20,3 @@ export default function ProductCard({ id, name, price, img }) {
     </div>
   );
 }
-5;

@@ -2,14 +2,12 @@ import { useEffect, useState } from "react";
 import Banner from "../components/Banner";
 import { useNavigate, useParams } from "react-router";
 import { useDispatch } from "react-redux";
-import { setCartLength } from "../../redux/actions/actionCreator";
+import { addItemInCart } from "../../redux/actions/actionCreator";
 import Loading from "../components/Loading";
 
 export default function Product() {
   const { id } = useParams();
-
   const navigate = useNavigate();
-
   const dispatch = useDispatch();
 
   const [productData, setProductData] = useState({
@@ -25,9 +23,7 @@ export default function Product() {
 
   const loadProductData = () => {
     const url = `${import.meta.env.VITE_REQUEST_URL}/api/items/${id}`;
-
     setError(false);
-
     fetch(url)
       .then((res) => {
         if (!res.ok) {
@@ -55,31 +51,8 @@ export default function Product() {
       price: productData?.price,
     };
 
-    let cart = JSON.parse(localStorage.getItem("cart")) || [];
-
-    let productId = checkCart(currentProduct, cart);
-
-    if (productId == -1) {
-      console.log("new item");
-      cart.push(currentProduct);
-    } else {
-      console.log("update item");
-      let oldProductData = cart[productId];
-      cart[productId] = {
-        ...oldProductData,
-        count: oldProductData.count + currentProduct.count,
-      };
-    }
-
-    localStorage.setItem("cart", JSON.stringify(cart));
-    dispatch(setCartLength(cart.length));
+    dispatch(addItemInCart(currentProduct));
     navigate("/cart");
-  };
-
-  const checkCart = (product, cart) => {
-    return cart.findIndex(
-      (item) => item.title == product.title && item.size == product.size
-    );
   };
 
   useEffect(() => {
@@ -126,11 +99,11 @@ export default function Product() {
           <Banner />
 
           <section className="catalog-item">
-            <h2 className="text-center">{productData?.title}</h2>
+            <h2 className="text-center">{productData.title}</h2>
             <div className="row">
               <div className="col-5">
                 <img
-                  src={productData?.images[0]}
+                  src={productData.images[0]}
                   className="img-fluid"
                   alt=""
                 />
@@ -140,27 +113,27 @@ export default function Product() {
                   <tbody>
                     <tr>
                       <td>Артикул</td>
-                      <td>{productData?.sku}</td>
+                      <td>{productData.sku}</td>
                     </tr>
                     <tr>
                       <td>Производитель</td>
-                      <td>{productData?.manufacturer}</td>
+                      <td>{productData.manufacturer}</td>
                     </tr>
                     <tr>
                       <td>Цвет</td>
-                      <td>{productData?.color}</td>
+                      <td>{productData.color}</td>
                     </tr>
                     <tr>
                       <td>Материалы</td>
-                      <td>{productData?.material}</td>
+                      <td>{productData.material}</td>
                     </tr>
                     <tr>
                       <td>Сезон</td>
-                      <td>{productData?.season}</td>
+                      <td>{productData.season}</td>
                     </tr>
                     <tr>
                       <td>Повод</td>
-                      <td>{productData?.reason}</td>
+                      <td>{productData.reason}</td>
                     </tr>
                   </tbody>
                 </table>

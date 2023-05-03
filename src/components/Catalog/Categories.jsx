@@ -3,10 +3,12 @@ export default function Categories({ categoryList, active, onChange }) {
     <ul className="catalog-categories nav justify-content-center">
       {categoryList.map((item) => (
         <li className="nav-item" key={item.id}>
-          <a
+          <button
+            type="button"
             className={
-              item.id == active ? "nav-link active" : "nav-link text-secondary"
+              item.id === active ? 'nav-link active' : 'nav-link text-secondary'
             }
+            style={{ border: 'none', background: 'none' }}
             href="#"
             onClick={(e) => {
               e.preventDefault();
@@ -14,7 +16,7 @@ export default function Categories({ categoryList, active, onChange }) {
             }}
           >
             {item.title}
-          </a>
+          </button>
         </li>
       ))}
     </ul>

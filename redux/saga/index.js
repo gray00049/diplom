@@ -4,12 +4,12 @@ import {
   takeLatest,
   put,
   select,
-} from "@redux-saga/core/effects";
-import * as actionTypes from "../actions/actionType";
-import * as actions from "../actions/actionCreator";
-import loadTopSales from "../../api/loadTopSales";
-import loadCategories from "../../api/loadCategories";
-import loadProducts from "../../api/loadProducts";
+} from '@redux-saga/core/effects';
+import * as actionTypes from '../actions/actionType';
+import * as actions from '../actions/actionCreator';
+import loadTopSales from '../../api/loadTopSales';
+import loadCategories from '../../api/loadCategories';
+import loadProducts from '../../api/loadProducts';
 
 // Top sales saga
 function* workerTopSalesSaga() {
@@ -44,31 +44,27 @@ function* workerGetProducts() {
   try {
     const query = yield select((state) => state.query.queryRequest);
     const urlRequest = yield select((state) => {
-      const offset = state.products.offset;
-      const categoryId = state.products.categoryId;
+      const { offset, categoryId } = state.products;
 
-      let url = import.meta.env.VITE_REQUEST_URL + "/api/items";
+      const url = `${import.meta.env.VITE_REQUEST_URL}/api/items`;
 
-      let params = {};
+      const sarchParams = {};
 
       if (query) {
-        params.q = query;
+        sarchParams.q = query;
       }
 
       if (offset) {
-        params.offset = offset;
+        sarchParams.offset = offset;
       }
 
-      if (categoryId != 1) {
-        params.categoryId = categoryId;
+      if (categoryId !== 1) {
+        sarchParams.categoryId = categoryId;
       }
 
-      Object.keys(params).map((item, index) => {
-        let prefix = index == 0 ? "?" : "&";
-        url += `${prefix}${item}=${params[item]}`;
-      });
+      const stringParams = new URLSearchParams(sarchParams).toString();
 
-      return url;
+      return `${url}?${stringParams}`;
     });
     const data = yield retry(3, 1000, () => loadProducts(urlRequest));
     if (data.length < 6) {
@@ -84,16 +80,8 @@ function* handleProducts() {
   yield takeLatest(actionTypes.GET_PRODUCTS, workerGetProducts);
 }
 
-// Query saga
-function* workerQuery() {}
-
-function* handleQuery() {
-  yield takeLatest(actionTypes.CHANGE_QUERY, workerQuery);
-}
-
 export default function* rootSaga() {
   yield spawn(handleTopSales);
   yield spawn(handleCategories);
   yield spawn(handleProducts);
-  yield spawn(handleQuery);
 }

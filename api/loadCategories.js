@@ -7,5 +7,5 @@ export default async function loadCategories() {
     throw new Error(response.statusText);
   }
 
-  return response.json()
+  return response.json();
 }

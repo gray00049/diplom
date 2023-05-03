@@ -1,63 +1,52 @@
-import { useState, useEffect } from "react";
-import Banner from "../components/Banner";
-import CartList from "../components/Cart/Cartlist";
-import OrderForm from "../components/Cart/OrderForm";
-import { useDispatch } from "react-redux";
-import { setCartLength } from "../../redux/actions/actionCreator";
-import EmptyCart from "../components/Cart/EmptyCart";
-import { useNavigate } from "react-router";
-import Message from "../components/Message";
+import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router';
+import { deleteItemFromCart, loadCartData } from '../../redux/actions/actionCreator';
+import Banner from '../components/Banner';
+import CartList from '../components/Cart/Cartlist';
+import OrderForm from '../components/Cart/OrderForm';
+import EmptyCart from '../components/Cart/EmptyCart';
+import Message from '../components/Message';
 
 export default function Cart() {
   const dispatch = useDispatch();
 
   const navigate = useNavigate();
 
-  const [cartItems, setCartItems] = useState([]);
+  const cartItems = useSelector((state) => state.cart.cartItems);
 
-  const [messageType, setMessageType] = useState("");
-
-  useEffect(() => {
-    loadCartData();
-  }, []);
-
-  const loadCartData = () => {
-    if (localStorage.getItem("cart")) {
-      setCartItems(JSON.parse(localStorage.getItem("cart")));
-    } else {
-      let initialCart = [];
-      setCartItems(initialCart);
-      localStorage.setItem("cart", JSON.stringify(initialCart));
-    }
-  };
+  const [messageType, setMessageType] = useState('');
 
   const handleDeleteProduct = (id) => {
-    let cartProduct = JSON.parse(localStorage.getItem("cart"));
-    cartProduct.splice(id, 1);
-    localStorage.setItem("cart", JSON.stringify(cartProduct));
-    setCartItems(cartProduct);
+    dispatch(deleteItemFromCart(id));
+  };
 
-    dispatch(setCartLength(cartProduct.length));
+  const viewSuccessMessage = () => {
+    setMessageType('success');
+    setTimeout(() => {
+      navigate('/');
+      dispatch(loadCartData());
+    }, 3000);
   };
 
   const handleSendForm = (evt, phoneNumber, address) => {
     evt.preventDefault();
-    let cart = JSON.parse(localStorage.getItem("cart"));
+    const cart = JSON.parse(localStorage.getItem('cart'));
 
     if (!cart) {
       return false;
     }
 
-    let order = {
+    const order = {
       owner: {
         phone: phoneNumber,
-        address: address,
+        address,
       },
       items: [],
     };
 
     cart.map((item) => {
-      let itemData = {
+      const itemData = {
         id: +item.id,
         price: item.price,
         count: item.count,
@@ -66,13 +55,13 @@ export default function Cart() {
       order.items.push(itemData);
     });
 
-    setMessageType("loading");
+    setMessageType('loading');
 
     fetch(`${import.meta.env.VITE_REQUEST_URL}/api/order`, {
-      method: "POST",
+      method: 'POST',
       body: JSON.stringify(order),
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
     })
       .then((res) => {
@@ -80,24 +69,19 @@ export default function Cart() {
           throw new Error(res.statusText);
         }
 
+        console.log(1);
+
         viewSuccessMessage();
 
-        dispatch(setCartLength(0));
-        localStorage.setItem("cart", JSON.stringify([]));
+        localStorage.setItem('cart', JSON.stringify([]));
       })
-      .catch((error) => {
-        setMessageType("error");
+      .catch(() => {
+        console.log(2);
+        setMessageType('error');
         setTimeout(() => {
-          setMessageType("");
+          setMessageType('');
         }, 2000);
       });
-  };
-
-  const viewSuccessMessage = () => {
-    setMessageType("success");
-    setTimeout(() => {
-      navigate("/");
-    }, 3000);
   };
 
   if (!cartItems.length) {

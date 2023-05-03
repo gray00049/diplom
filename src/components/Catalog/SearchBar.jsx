@@ -1,24 +1,15 @@
-import { useEffect, useRef } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useEffect, useRef } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useLocation } from 'react-router';
 import {
   changeProductsCategory,
-  changeProductsOffset,
   changeQuery,
   getProducts,
-} from "../../../redux/actions/actionCreator";
-import { useLocation } from "react-router";
+} from '../../../redux/actions/actionCreator';
 
 export default function SearchBar() {
-  let input = useRef();
+  const input = useRef();
   const searchParams = useLocation();
-
-  useEffect(() => {
-    if (searchParams?.search != "") {
-      input.current.value = decodeURI(searchParams?.search.slice(3));
-      handlerChangeQuery();
-    }
-  });
-
   const dispatch = useDispatch();
 
   const activeCategory = useSelector((state) => state.products.categoryId);
@@ -26,7 +17,7 @@ export default function SearchBar() {
   const handlerChangeQuery = () => {
     const query = input.current.value;
 
-    if (query != "") {
+    if (query !== '') {
       dispatch(changeProductsCategory(activeCategory));
       dispatch(changeQuery(query));
     } else {
@@ -36,6 +27,13 @@ export default function SearchBar() {
 
     dispatch(getProducts(query));
   };
+
+  useEffect(() => {
+    if (searchParams?.search !== '') {
+      input.current.value = decodeURI(searchParams?.search.slice(3));
+      handlerChangeQuery();
+    }
+  });
 
   return (
     <form

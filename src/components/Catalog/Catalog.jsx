@@ -1,15 +1,15 @@
-import { useEffect } from "react";
-import ProductCard from "../ProductCard";
-import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import ProductCard from '../ProductCard';
 import {
   changeProductsCategory,
   changeProductsOffset,
   getCategories,
   getProducts,
-} from "../../../redux/actions/actionCreator";
-import Categories from "./Categories";
-import LoadMoreButton from "./LoadMoreButton";
-import Loading from "../Loading";
+} from '../../../redux/actions/actionCreator';
+import Categories from './Categories';
+import LoadMoreButton from './LoadMoreButton';
+import Loading from '../Loading';
 
 export default function Catalog() {
   const dispatch = useDispatch();
@@ -36,7 +36,7 @@ export default function Catalog() {
     dispatch(getProducts());
   };
 
-  let showContent = !(products.loading || categories.loading);
+  const showContent = !(products.loading || categories.loading);
   return (
     <>
       {!categories.loading && (

@@ -1,6 +1,6 @@
-import Banner from "../components/Banner";
-import Catalog from "../components/Catalog/Catalog";
-import SearchBar from "../components/Catalog/SearchBar";
+import Banner from '../components/Banner';
+import Catalog from '../components/Catalog/Catalog';
+import SearchBar from '../components/Catalog/SearchBar';
 
 export default function CatalogPage() {
   return (

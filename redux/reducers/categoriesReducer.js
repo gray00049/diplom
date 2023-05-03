@@ -2,7 +2,7 @@ import {
   GET_CATEGORIES,
   GET_CATEGORIES_FAILED,
   GET_CATEGORIES_SUCCESS,
-} from "../actions/actionType";
+} from '../actions/actionType';
 
 const initialState = {
   data: [],
@@ -10,13 +10,13 @@ const initialState = {
   error: false,
 };
 
-export function categoriesReducer(state = initialState, action) {
+export default function categoriesReducer(state = initialState, action) {
   switch (action.type) {
     case GET_CATEGORIES:
       return { ...state, loading: true, error: false };
     case GET_CATEGORIES_SUCCESS:
       return {
-        data: [{ id: 1, title: "Все" }, ...action.payload],
+        data: [{ id: 1, title: 'Все' }, ...action.payload],
         loading: false,
         error: false,
       };

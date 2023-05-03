@@ -1,43 +1,48 @@
-import { NavLink, useNavigate } from "react-router-dom";
-import logo from "../assets/header-logo.png";
-import { useState } from "react";
-import { useSelector } from "react-redux";
+import { NavLink, useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import logo from '../assets/header-logo.png';
+import { loadCartData } from '../../redux/actions/actionCreator';
 
 export default function Header() {
   const [searchBar, changeSearchBar] = useState({
-    type: "invisible",
-    value: "",
+    type: 'invisible',
+    value: '',
   });
 
   const navigate = useNavigate();
 
-  const cartCount =
-    useSelector((state) => state.cart.length) ||
-    JSON.parse(localStorage.getItem("cart")).length;
+  const dispatch = useDispatch();
+
+  const cartCount = useSelector((state) => state.cart.length);
+
+  useEffect(() => {
+    dispatch(loadCartData());
+  }, [cartCount]);
 
   const handleChangeQuery = (evt) => {
     changeSearchBar({ ...searchBar, value: evt.target.value });
   };
 
-  const handleCallSearchBar = () => {
-    if (searchBar.type == "invisible") {
-      changeSearchBar({ ...searchBar, type: "visible" });
-    } else {
-      handleSendQuery();
-    }
-  };
-
   const handleSendQuery = () => {
-    if (searchBar.type == "visible" && searchBar.value == "") {
-      changeSearchBar({ ...searchBar, type: "invisible" });
+    if (searchBar.type === 'visible' && searchBar.value === '') {
+      changeSearchBar({ ...searchBar, type: 'invisible' });
     } else {
       navigate(`/catalog?q=${searchBar.value}`);
-      changeSearchBar({ type: "invisible", value: "" });
+      changeSearchBar({ type: 'invisible', value: '' });
     }
   };
 
   const handleClickCart = () => {
-    navigate("/cart");
+    navigate('/cart');
+  };
+
+  const handleCallSearchBar = () => {
+    if (searchBar.type === 'invisible') {
+      changeSearchBar({ ...searchBar, type: 'visible' });
+    } else {
+      handleSendQuery();
+    }
   };
 
   return (
@@ -85,12 +90,12 @@ export default function Header() {
                   >
                     <div
                       className={`${
-                        cartCount == 0 ? "d-none" : "header-controls-cart-full"
+                        cartCount === 0 ? 'd-none' : 'header-controls-cart-full'
                       }`}
                     >
                       {cartCount}
                     </div>
-                    <div className="header-controls-cart-menu"></div>
+                    <div className="header-controls-cart-menu" />
                   </div>
                 </div>
                 <form

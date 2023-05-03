@@ -5,7 +5,7 @@ import {
   CHANGE_PRODUCTS_OFFSET,
   CHANGE_PRODUCTS_CATEGORY,
   GET_PRODUCTS_FULL,
-} from "../actions/actionType";
+} from '../actions/actionType';
 
 const initialState = {
   oldData: [],
@@ -18,7 +18,7 @@ const initialState = {
   all: false,
 };
 
-export function productsReducer(state = initialState, action) {
+export default function productsReducer(state = initialState, action) {
   let newData;
   switch (action.type) {
     case GET_PRODUCTS:
@@ -30,7 +30,9 @@ export function productsReducer(state = initialState, action) {
           oldData: state.data,
         };
       }
-      return { ...state, loading: true, error: false, oldData: state.data };
+      return {
+        ...state, loading: true, error: false, oldData: state.data,
+      };
     case GET_PRODUCTS_SUCCESS:
       newData = action.payload;
       if (state.getMoreLoading) {

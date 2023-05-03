@@ -1,14 +1,14 @@
-import { useState } from "react";
+import { useState } from 'react';
 
 export default function OrderForm({ onSendOrder }) {
-  const [phoneNumber, setPhoneNumber] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState('');
 
-  const [address, setAddress] = useState("");
+  const [address, setAddress] = useState('');
 
   return (
     <section className="order">
       <h2 className="text-center">Оформить заказ</h2>
-      <div className="card" style={{ maxWidth: 30 + "rem", margin: "0 auto" }}>
+      <div className="card" style={{ maxWidth: '30rem', margin: '0px auto' }}>
         <form
           className="card-body"
           onSubmit={(evt) => {

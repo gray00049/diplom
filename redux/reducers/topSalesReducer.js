@@ -2,7 +2,7 @@ import {
   GET_TOP_SALES,
   GET_TOP_SALES_FAILED,
   GET_TOP_SALES_SUCCESS,
-} from "../actions/actionType";
+} from '../actions/actionType';
 
 const initialState = {
   data: [],
@@ -10,7 +10,7 @@ const initialState = {
   error: false,
 };
 
-export function topSalesReducer(state = initialState, action) {
+export default function topSalesReducer(state = initialState, action) {
   switch (action.type) {
     case GET_TOP_SALES:
       return { ...state, loading: true, failed: false };

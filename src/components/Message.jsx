@@ -1,23 +1,23 @@
 export default function Message({ type }) {
   let content;
 
-  if (type == "loading") {
+  if (type === 'loading') {
     content = (
       <div className="preloader">
-        <span></span>
-        <span></span>
-        <span></span>
-        <span></span>
+        <span />
+        <span />
+        <span />
+        <span />
       </div>
     );
-  } else if (type == "success") {
+  } else if (type === 'success') {
     content = (
       <div className="text-center">
         <h3>Ваш заказ успешно сформирован!</h3>
         <p>Скоро вы окажитесь на главной странице</p>
       </div>
     );
-  } else if (type == "error") {
+  } else if (type === 'error') {
     content = (
       <div className="text-center">
         <h3>

@@ -1,6 +1,6 @@
-import banner from "../assets/banner.jpg";
-import TopSales from "../components/TopSales";
-import Catalog from "../components/Catalog/Catalog";
+import banner from '../assets/banner.jpg';
+import TopSales from '../components/TopSales';
+import Catalog from '../components/Catalog/Catalog';
 
 export default function Main() {
   return (

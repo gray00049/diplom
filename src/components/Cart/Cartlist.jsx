@@ -1,24 +1,21 @@
-import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 
 export default function CartList({ cartItems, onDelete }) {
   const [totalSum, setTotalSum] = useState(0);
+
+  const calcTotalPrice = () => {
+    const totalPrice = cartItems.reduce((sum, item) => sum + (item.count * item.price), 0);
+    setTotalSum(totalPrice);
+  };
 
   useEffect(() => {
     calcTotalPrice();
   }, [cartItems]);
 
-  const calcTotalPrice = () => {
-    let totalPrice = 0;
-    cartItems.map((item) => {
-      totalPrice += item.count * item.price;
-    });
-    setTotalSum(totalPrice);
-  };
-
-  const formattedPrice = price => {
-    return new Intl.NumberFormat().format(Number(price))
-  }
+  const formattedPrice = (price) => (
+    `${new Intl.NumberFormat().format(Number(price))} руб.`
+  );
 
   return (
     <section className="cart">
@@ -30,7 +27,7 @@ export default function CartList({ cartItems, onDelete }) {
             <th scope="col">Название</th>
             <th scope="col">Размер</th>
             <th scope="col">Кол-во</th>
-            <th scope="col">Стоимость</th> 
+            <th scope="col">Стоимость</th>
             <th scope="col">Итого</th>
             <th scope="col">Действия</th>
           </tr>
@@ -38,16 +35,21 @@ export default function CartList({ cartItems, onDelete }) {
         <tbody>
           {cartItems.map((item, index) => (
             <tr key={index}>
-              <td scope="row">{index + 1}</td>
+              <td>{index + 1}</td>
               <td>
                 <Link to={`/products/${item?.id}`}>{item?.title}</Link>
               </td>
               <td>{item?.size}</td>
               <td>{item?.count}</td>
-              <td>{formattedPrice(item?.price)} руб.</td>
-              <td>{formattedPrice(item?.count * item?.price)} руб.</td>
+              <td>
+                {formattedPrice(item?.price)}
+              </td>
+              <td>
+                {formattedPrice(item.count * item.price)}
+              </td>
               <td>
                 <button
+                  type="button"
                   className="btn btn-outline-danger btn-sm"
                   onClick={() => onDelete(index)}
                 >
@@ -60,7 +62,9 @@ export default function CartList({ cartItems, onDelete }) {
             <td colSpan="5" className="text-right">
               Общая стоимость
             </td>
-            <td>{formattedPrice(totalSum)} руб.</td>
+            <td>
+              {formattedPrice(totalSum)}
+            </td>
           </tr>
         </tbody>
       </table>

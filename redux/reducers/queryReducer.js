@@ -1,10 +1,10 @@
-import { CHANGE_QUERY } from "../actions/actionType";
+import { CHANGE_QUERY } from '../actions/actionType';
 
 const initialState = {
-  queryRequest: "",
+  queryRequest: '',
 };
 
-export function queryReducer(state = initialState, action) {
+export default function queryReducer(state = initialState, action) {
   switch (action.type) {
     case CHANGE_QUERY:
       return { queryRequest: action.payload };
